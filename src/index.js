@@ -42,10 +42,11 @@ function expressionCalculator(expr) {
         arr = expr.trim().split('');
     }
     else {
-        arr = expr.trim().split(' ');
+        
+        arr = expr.replace(/\s+/g, ' ').trim().split(' ');
     }
     let countScobs = 0;
-    let start = 0;
+    let start = 0;                                                              
     while (arr.indexOf('(') != -1) {
         for ( let i = 0; i < arr.length; i++) {
             if (arr[i] == '(') {
@@ -57,8 +58,10 @@ function expressionCalculator(expr) {
             if (arr[i] == ')' && countScobs > 1) {
                 countScobs--
             }
-            if (arr[i] == ')' &&  countScobs == 1) {
-                arr.splice(start, i-start+1, expressionCalculator(arr.slice(start+1, i).join(' ')))
+            else if (arr[i] == ')' &&  countScobs == 1) {
+                arr.splice(start, i-start+1, String(expressionCalculator(arr.slice(start+1, i).join(' '))))
+                i = 0;
+                countScobs = 0;
             }
         }
     }
